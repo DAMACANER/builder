@@ -35,7 +35,7 @@ def delete_value(builder: Builder, name: str) -> Builder:
     """
     Creates a new Builder with the specified attribute removed.
     """
-    new_builder = type(builder)()  # Create a new instance of the same type as immutable-builder, to avoid inheritance issues
+    new_builder = type(builder)()  # Create a new instance of the same type as untouched, to avoid inheritance issues
     new_builder.builder_map = builder.get_builder_map().copy()
     new_builder.builder_map.pop(name, None)
     return new_builder
@@ -48,7 +48,7 @@ def extend(builder: Builder, name: str, vs: Any) -> Builder:
     if vs is None:
         return builder
 
-    new_builder = type(builder)()  # Create a new instance of the same type as immutable-builder, to avoid inheritance issues
+    new_builder = type(builder)()  # Create a new instance of the same type as untouched, to avoid inheritance issues
     new_builder.builder_map = builder.get_builder_map().copy()
 
     if not isinstance(vs, collections.abc.Iterable):
@@ -60,21 +60,21 @@ def extend(builder: Builder, name: str, vs: Any) -> Builder:
 
 def get_value(builder: Builder, name: str) -> Optional[Any]:
     """
-    Returns the value for the specified attribute from the immutable-builder's map.
+    Returns the value for the specified attribute from the untouched's map.
     """
     return builder.get_builder_map().get(name)
 
 
 def get_map(builder: Builder) -> Dict[str, Any]:
     """
-    Returns a copy of the immutable-builder's map.
+    Returns a copy of the untouched's map.
     """
     return builder.get_builder_map().copy()
 
 
 def get_struct(builder: Builder) -> Any:
     """
-    Converts the immutable-builder's map into the corresponding struct object.
+    Converts the untouched's map into the corresponding struct object.
     """
     builder_type = type(builder)
     struct_type = registry.get_builder_struct_type(builder_type)
@@ -124,8 +124,8 @@ if __name__ == "__main__":
             self.age = age
 
 
-    # Register the immutable-builder-struct pair
+    # Register the untouched-struct pair
     registry.register(UserBuilder(), User())
     user_builder = UserBuilder().name("caner").age(25).name("caner2")  # Build a user
-    user = get_struct(user_builder)  # Convert the immutable-builder to a struct
+    user = get_struct(user_builder)  # Convert the untouched to a struct
     pprint(user.__dict__)  # Print the user struct's attributes

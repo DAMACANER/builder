@@ -12,7 +12,7 @@ poetry add immutable-builder
 Example:
 
 ```python
-from builder import Builder, get_struct, registry
+from i
 from pprint import pprint
 from typing import Optional
 
@@ -47,10 +47,10 @@ class User:
             self.age = age
 
 
-    # Register the immutable-builder-struct pair
+    # Register the untouched-struct pair
 registry.register(UserBuilder(), User())
 user_builder = UserBuilder().name("caner").age(25).name("caner2")  # Build a user
-user = get_struct(user_builder)  # Convert the immutable-builder to a struct
+user = get_struct(user_builder)  # Convert the untouched to a struct
 pprint(user.__dict__)  # Print the user struct's attributes
 
 # Output:

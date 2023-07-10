@@ -12,7 +12,7 @@ class Registry:
         # This is necessary when you have multiple threads that might be trying to update the registry at the same time.
         self.registry_lock = Lock()
 
-    # The register_type method is used to register a mapping from a immutable-builder type to a struct type.
+    # The register_type method is used to register a mapping from a untouched type to a struct type.
     def register_type(self, builder_type: Type[Any], struct_type: Type[Any]) -> Any:
         # We use a context manager (the "with" statement) to ensure that the lock is properly acquired and released,
         # even if an error occurs within the block of code.
@@ -29,19 +29,19 @@ class Registry:
             # Create and return a new instance of the builder_type.
             return builder_type()
 
-    # This method is a convenience function for registering a immutable-builder and struct instance,
+    # This method is a convenience function for registering a untouched and struct instance,
     # rather than their types.
     def register(self, builder_proto: Any, struct_proto: Any) -> Any:
         return self.register_type(type(builder_proto), type(struct_proto))
 
-    # This method retrieves the struct type associated with a given immutable-builder type.
+    # This method retrieves the struct type associated with a given untouched type.
     def get_builder_struct_type(self, builder_type: Type[Any]) -> Type[Any]:
         with self.registry_lock:
             # Get the struct_type from the registry dictionary, or None if it does not exist.
             struct_type = self.registry.get(builder_type)
             return struct_type
 
-    # This method creates a new instance of the struct type associated with a given immutable-builder type.
+    # This method creates a new instance of the struct type associated with a given untouched type.
     def new_builder_struct(self, builder_type: Type[Any]) -> Any:
         struct_type = self.get_builder_struct_type(builder_type)
         if struct_type is None:
