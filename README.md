@@ -2,9 +2,13 @@
 
 https://pypi.org/project/untouched/
 
+https://github.com/DAMACANER/untouched
+
+
 Carbon copy of https://github.com/lann/builder for making a Python NoSQL query builder.
 
 Installing:
+
 ```python
 poetry add untouched
 ```
@@ -12,11 +16,15 @@ poetry add untouched
 Example:
 
 ```python
-from ?????
-from pprint import pprint
+from src.untouched.builder import Builder, get_struct, T
+from src.untouched.registry import Registry
 from typing import Optional
+from pprint import pprint
 
-class UserBuilder(Builder):
+registry = Registry()  # Initialize the registry
+
+if __name__ == "__main__":
+    class UserBuilder(Builder):
         """
         The UserBuilder class inherits from Builder and provides specific methods to set the 'name' and 'age' attributes.
         """
@@ -37,7 +45,7 @@ class UserBuilder(Builder):
             return self.set_value("age", val)
 
 
-class User:
+    class User:
         """
         The User class represents the structure that the UserBuilder will build.
         """
@@ -47,11 +55,12 @@ class User:
             self.age = age
 
 
-    # Register the untouched-struct pair
-registry.register(UserBuilder(), User())
-user_builder = UserBuilder().name("caner").age(25).name("caner2")  # Build a user
-user = get_struct(user_builder)  # Convert the untouched to a struct
-pprint(user.__dict__)  # Print the user struct's attributes
+    # Register the builder-struct pair
+    registry.register(UserBuilder(), User())
+    user_builder = UserBuilder().name("caner").age(25).name("caner2")  # Build a user
+    user = user_builder.get_builder_map()
+    pprint(user.__dict__)  # Print the user struct's attributes
+
 
 # Output:
 # 

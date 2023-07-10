@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 import collections.abc
-from pprint import pprint
 from typing import Any, Dict, Optional, TypeVar
-from registry import Registry
 
+from .registry import Registry
 
 # any subclass of Builder will be able to use the methods defined in Builder, or the methods defined in its subclasses
 T = TypeVar('T', bound='Builder')
@@ -27,8 +26,6 @@ class Builder:
 
     def get_builder_map(self) -> Dict:
         return self.builder_map
-
-
 
 
 def delete_value(builder: Builder, name: str) -> Builder:
@@ -72,7 +69,7 @@ def get_map(builder: Builder) -> Dict[str, Any]:
     return builder.get_builder_map().copy()
 
 
-def get_struct(builder: Builder) -> Any:
+def get_struct(builder: Builder, registry: Registry) -> Any:
     """
     Converts the builder's map into the corresponding struct object.
     """
@@ -87,45 +84,3 @@ def get_struct(builder: Builder) -> Any:
         setattr(new_struct, name, value)
     return new_struct
 
-
-empty_builder = Builder()
-
-registry = Registry()  # Initialize the registry
-
-if __name__ == "__main__":
-    class UserBuilder(Builder):
-        """
-        The UserBuilder class inherits from Builder and provides specific methods to set the 'name' and 'age' attributes.
-        """
-
-        def __init__(self):
-            super().__init__()
-
-        def name(self, val: str) -> 'UserBuilder':
-            """
-            Creates a new UserBuilder with the 'name' attribute set to the provided value.
-            """
-            return self.set_value("name", val)
-
-        def age(self, val: int) -> 'UserBuilder':
-            """
-            Creates a new UserBuilder with the 'age' attribute set to the provided value.
-            """
-            return self.set_value("age", val)
-
-
-    class User:
-        """
-        The User class represents the structure that the UserBuilder will build.
-        """
-
-        def __init__(self, name: Optional[str] = None, age: Optional[int] = None):
-            self.name = name
-            self.age = age
-
-
-    # Register the builder-struct pair
-    registry.register(UserBuilder(), User())
-    user_builder = UserBuilder().name("caner").age(25).name("caner2")  # Build a user
-    user = get_struct(user_builder)  # Convert the builder to a struct
-    pprint(user.__dict__)  # Print the user struct's attributes
