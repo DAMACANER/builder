@@ -16,15 +16,13 @@ poetry add untouched
 Example:
 
 ```python
-from src.untouched.builder import Builder, get_struct, T
-from src.untouched.registry import Registry
+from  untouched.builder import Builder, get_struct, T
+from untouched.registry import Registry
 from typing import Optional
-from pprint import pprint
 
-registry = Registry()  # Initialize the registry
-
-if __name__ == "__main__":
-    class UserBuilder(Builder):
+NameDBField: str = "name"
+AgeDBField: str = "age"
+class UserQueryBuilder(Builder):
         """
         The UserBuilder class inherits from Builder and provides specific methods to set the 'name' and 'age' attributes.
         """
@@ -32,20 +30,20 @@ if __name__ == "__main__":
         def __init__(self):
             super().__init__()
 
-        def name(self, val: str) -> 'UserBuilder':
+        def name(self, val: str) -> 'UserQueryBuilder':
             """
             Creates a new UserBuilder with the 'name' attribute set to the provided value.
             """
-            return self.set_value("name", val)
+            return self.set_value(NameDBField, val)
 
-        def age(self, val: int) -> 'UserBuilder':
+        def age(self, val: int) -> 'UserQueryBuilder':
             """
             Creates a new UserBuilder with the 'age' attribute set to the provided value.
             """
-            return self.set_value("age", val)
+            return self.set_value(AgeDBField, val)
 
 
-    class User:
+class User:
         """
         The User class represents the structure that the UserBuilder will build.
         """
@@ -54,17 +52,15 @@ if __name__ == "__main__":
             self.name = name
             self.age = age
 
-
-    # Register the builder-struct pair
-    registry.register(UserBuilder(), User())
-    user_builder = UserBuilder().name("caner").age(25).name("caner2")  # Build a user
-    user = user_builder.get_builder_map()
-    pprint(user.__dict__)  # Print the user struct's attributes
+registry = Registry()
+registry.register(UserQueryBuilder(), User())
+user_builder = UserQueryBuilder().name("caner").age(25)
+print(user_builder.get_builder_map())
 
 
 # Output:
 # 
-# {'age': 25, 'name': 'caner2'}
+# {'age': 25, 'name': 'caner'}
 ```
 
 Thanks a lot to Lann for the original builder package, this is wonderful.
