@@ -1,9 +1,11 @@
 [tool.poetry]
-name = "builder"
-version = "0.1.0"
-description = "Immutable builder, carbon copy of lann/builder in GoLang."
+name = "immutable-builder"
+version = "0.1.1"
+description = "Immutable builder, carbon copy of lann/builder package in GoLang."
 authors = ["damacaner <caner@damacana.dev>"]
 readme = "README.md"
+packages = [{include="immutable-builder", from="src"}]
+
 
 [tool.poetry.dependencies]
 python = "^3.11"
