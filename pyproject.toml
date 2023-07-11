@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "untouched"
-version = "0.1.6"
+version = "0.2.6"
 description = "Immutable builder, carbon copy of lann/builder package in GoLang."
 authors = ["damacaner <caner@damacana.dev>"]
 readme = "README.md"
